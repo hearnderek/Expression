@@ -30,6 +30,7 @@ var expressionTree =
     new BinaryOperation.Add(
         new Value(5),
         new Value(10));
+Console.WriteLine(ExpressionStringifier.Stringify(expressionTree));
 Console.WriteLine(expressionTree.Evaluate().value);
 
 
@@ -40,6 +41,7 @@ expressionTree =
         new BinaryOperation.Add(
             new Value(5),
             new Value(7)));
+Console.WriteLine(ExpressionStringifier.Stringify(expressionTree));
 Console.WriteLine(expressionTree.Evaluate().value);
 
 
@@ -52,13 +54,14 @@ expressionTree =
             new BinaryOperation.Add(
                 new Value(7),
                 new Value(11))));
-Console.WriteLine(expressionTree.Evaluate().value);
 
+Console.WriteLine(ExpressionStringifier.Stringify(expressionTree));
+Console.WriteLine(expressionTree.Evaluate().value);
 
 // 3 + 5 * 7 + 11
 expressionTree =
     new BinaryOperation.Add(
-        new Value(3),
+        new Value(99),
         new BinaryOperation.Add(
             new BinaryOperation.Mul(
                 new Value(5),
@@ -66,6 +69,8 @@ expressionTree =
             ),
             new Value(11)));
 
+Console.WriteLine(ExpressionStringifier.Stringify(expressionTree));
+Console.WriteLine(expressionTree.Evaluate().value);
 
 // 3 + 5 * x + 11
 expressionTree =
@@ -77,6 +82,9 @@ expressionTree =
                 new Variable("x")
             ),
             new Value(11)));
+Console.WriteLine(ExpressionStringifier.Stringify(expressionTree));
+
+
 Dictionary<string, int> variableDefinitions = new Dictionary<string, int>() { { "x", 5 } };
 Console.WriteLine(expressionTree.Evaluate( variableDefinitions ).value);
 
