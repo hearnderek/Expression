@@ -6,8 +6,87 @@ using System.Threading.Tasks;
 
 namespace ExpressionTree
 {
+    public interface IExpressionVisitorAcceptor<T>
+    {
+        public T AcceptReturn(IExpressionVisitor visitor);
+        public void Accept(IExpressionVisitor visitor);
+    }
 
-    public static class ExpressionStringifier
+    /// <summary>
+    /// Non-Recursive Visitor purely to provide double-dispatch
+    /// </summary>
+    public interface IExpressionVisitor
+    {
+        public void Visit(BinaryOperation.Add op);
+        public void Visit(BinaryOperation.Mul op);
+        public void Visit(BinaryOperation.Sub op);
+        public void Visit(BinaryOperation.Div op);
+        public void Visit(BinaryOperation.Exp op);
+        public void Visit(Value value);
+        public void Visit(Variable variable);
+    }
+
+    public class ExpressionStringifier : IExpressionVisitor
+    {
+        public string result = "";
+
+        public static string Stringify(Expression expression)
+        {
+            var visitor = new ExpressionStringifier();
+            expression.Accept(visitor);
+            return visitor.result;
+        }
+
+        public void Visit(BinaryOperation.Add op)
+        {
+            op.left.Accept(this);
+            result += " + ";
+            op.right.Accept(this);
+        }
+
+        public void Visit(BinaryOperation.Mul op)
+        {
+            op.left.Accept(this);
+            result += " * ";
+            op.right.Accept(this);
+        }
+
+        public void Visit(BinaryOperation.Sub op)
+        {
+            op.left.Accept(this);
+            result += " - ";
+            op.right.Accept(this);
+        }
+
+        public void Visit(BinaryOperation.Div op)
+        {
+            op.left.Accept(this);
+            result += " / ";
+            op.right.Accept(this);
+        }
+
+        public void Visit(BinaryOperation.Exp op)
+        {
+            op.left.Accept(this);
+            result += " ^ ";
+            op.right.Accept(this);
+        }
+
+        public void Visit(Value value)
+        {
+            result += value.value.ToString();
+        }
+
+        public void Visit(Variable variable)
+        {
+            result += variable.identifier;
+        }
+    }
+
+    /// <summary>
+    /// Since we're not using the visitor pattern we need to do some refection and cast
+    /// </summary>
+    public static class StaticExpressionStringifier
     {
 
         public static string Stringify(BinaryOperation.Add op) => Stringify(op.left) + " + " + Stringify(op.right);
@@ -50,11 +129,13 @@ namespace ExpressionTree
         }
     }
 
-    public abstract class Expression
+    public abstract class Expression : IExpressionVisitorAcceptor
     {
         public Expression parent;
         public List<Expression> expressions = new List<Expression>();
         public abstract Value Evaluate(Dictionary<string, int> variableDefinitions = null);
+
+        public abstract void Accept(IExpressionVisitor visitor);
 
         public Expression(IEnumerable<Expression> expressions = null, Expression parent = null)
         {
@@ -93,6 +174,9 @@ namespace ExpressionTree
             {
             }
 
+            public override void Accept(IExpressionVisitor visitor) => visitor.Visit(this);
+
+
             public override Value Evaluate(Dictionary<string, int> variableDefinitions = null)
             {
                 return new Value(left.Evaluate(variableDefinitions).value + right.Evaluate(variableDefinitions).value);
@@ -104,6 +188,9 @@ namespace ExpressionTree
             public Mul(Expression left, Expression right, Expression parent = null) : base(left, right, parent)
             {
             }
+
+            public override void Accept(IExpressionVisitor visitor) => visitor.Visit(this);
+
 
             public override Value Evaluate(Dictionary<string, int> variableDefinitions = null)
             {
@@ -117,6 +204,9 @@ namespace ExpressionTree
             {
             }
 
+            public override void Accept(IExpressionVisitor visitor) => visitor.Visit(this);
+
+
             public override Value Evaluate(Dictionary<string, int> variableDefinitions = null)
             {
                 return new Value(left.Evaluate(variableDefinitions).value - right.Evaluate(variableDefinitions).value);
@@ -129,6 +219,9 @@ namespace ExpressionTree
             {
             }
 
+            public override void Accept(IExpressionVisitor visitor) => visitor.Visit(this);
+
+
             public override Value Evaluate(Dictionary<string, int> variableDefinitions = null)
             {
                 return new Value(left.Evaluate(variableDefinitions).value - right.Evaluate(variableDefinitions).value);
@@ -140,6 +233,9 @@ namespace ExpressionTree
             public Exp(Expression left, Expression right, Expression parent = null) : base(left, right, parent)
             {
             }
+
+            public override void Accept(IExpressionVisitor visitor) => visitor.Visit(this);
+
 
             public override Value Evaluate(Dictionary<string, int> variableDefinitions = null)
             {
@@ -157,6 +253,9 @@ namespace ExpressionTree
             this.value = value;
         }
 
+        public override void Accept(IExpressionVisitor visitor) => visitor.Visit(this);
+
+
         public override Value Evaluate(Dictionary<string, int> variableDefinitions = null)
         {
             return this;
@@ -172,6 +271,8 @@ namespace ExpressionTree
         {
             this.identifier = identifier;
         }
+
+        public override void Accept(IExpressionVisitor visitor) => visitor.Visit(this);
 
 
         public override Value Evaluate(Dictionary<string, int> variableDefinitions = null)
