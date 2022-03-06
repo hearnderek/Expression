@@ -1,6 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using ExpressionTree;
 
 Console.WriteLine("Hello, World!");
 
@@ -27,62 +26,62 @@ Console.WriteLine("Hello, World!");
 
 // 5 + 10
 var expressionTree = 
-    new BinaryOperation.Add(
-        new Value(5),
-        new Value(10));
-Console.WriteLine(ExpressionStringifier.Stringify(expressionTree));
+    new AST.BinaryOperation.Add(
+        new AST.Value(5),
+        new AST.Value(10));
+Console.WriteLine(AST.ExpressionStringifier.Stringify(expressionTree));
 Console.WriteLine(expressionTree.Evaluate().value);
 
 
 // 3 + 5 + 7
 expressionTree =
-    new BinaryOperation.Add(
-        new Value(3),
-        new BinaryOperation.Add(
-            new Value(5),
-            new Value(7)));
-Console.WriteLine(ExpressionStringifier.Stringify(expressionTree));
+    new AST.BinaryOperation.Add(
+        new AST.Value(3),
+        new AST.BinaryOperation.Add(
+            new AST.Value(5),
+            new AST.Value(7)));
+Console.WriteLine(AST.ExpressionStringifier.Stringify(expressionTree));
 Console.WriteLine(expressionTree.Evaluate().value);
 
 
 // 3 + 5 + 7 + 11
 expressionTree =
-    new BinaryOperation.Add(
-        new Value(3),
-        new BinaryOperation.Add(
-            new Value(5),
-            new BinaryOperation.Add(
-                new Value(7),
-                new Value(11))));
+    new AST.BinaryOperation.Add(
+        new AST.Value(3),
+        new AST.BinaryOperation.Add(
+            new AST.Value(5),
+            new AST.BinaryOperation.Add(
+                new AST.Value(7),
+                new AST.Value(11))));
 
-Console.WriteLine(ExpressionStringifier.Stringify(expressionTree));
+Console.WriteLine(AST.ExpressionStringifier.Stringify(expressionTree));
 Console.WriteLine(expressionTree.Evaluate().value);
 
 // 3 + 5 * 7 + 11
 expressionTree =
-    new BinaryOperation.Add(
-        new Value(99),
-        new BinaryOperation.Add(
-            new BinaryOperation.Mul(
-                new Value(5),
-                new Value(7)
+    new AST.BinaryOperation.Add(
+        new AST.Value(99),
+        new AST.BinaryOperation.Add(
+            new AST.BinaryOperation.Mul(
+                new AST.Value(5),
+                new AST.Value(7)
             ),
-            new Value(11)));
+            new AST.Value(11)));
 
-Console.WriteLine(ExpressionStringifier.Stringify(expressionTree));
+Console.WriteLine(AST.ExpressionStringifier.Stringify(expressionTree));
 Console.WriteLine(expressionTree.Evaluate().value);
 
 // 3 + 5 * x + 11
 expressionTree =
-    new BinaryOperation.Add(
-        new Value(3),
-        new BinaryOperation.Add(
-            new BinaryOperation.Mul(
-                new Value(5),
-                new Variable("x")
+    new AST.BinaryOperation.Add(
+        new AST.Value(3),
+        new AST.BinaryOperation.Add(
+            new AST.BinaryOperation.Mul(
+                new AST.Value(5),
+                new AST.Variable("x")
             ),
-            new Value(11)));
-Console.WriteLine(ExpressionStringifier.Stringify(expressionTree));
+            new AST.Value(11)));
+Console.WriteLine(AST.ExpressionStringifier.Stringify(expressionTree));
 
 
 Dictionary<string, int> variableDefinitions = new Dictionary<string, int>() { { "x", 5 } };
@@ -93,3 +92,14 @@ Console.WriteLine(expressionTree.Evaluate(variableDefinitions).value);
 
 variableDefinitions = new Dictionary<string, int>() { { "x", 20 } };
 Console.WriteLine(expressionTree.Evaluate(variableDefinitions).value);
+
+
+
+
+
+
+var tokens = Tokens.Tokenizer.Tokenize("3 + 5 * x + 11");
+foreach (var token in tokens)
+{
+    Console.WriteLine(token);
+}

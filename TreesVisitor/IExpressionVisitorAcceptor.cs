@@ -1,4 +1,4 @@
-﻿namespace ExpressionTree
+﻿namespace AST
 {
     public interface IExpressionVisitorAcceptor
     {

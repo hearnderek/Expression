@@ -4,7 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExpressionTree
+
+/// <summary>
+/// TODO move this to it's own folder, and move inner classes to their own files
+/// </summary>
+namespace AST
 {
     public interface IExpressionVisitorAcceptor<T>
     {
