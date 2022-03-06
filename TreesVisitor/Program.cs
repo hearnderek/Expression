@@ -96,9 +96,7 @@ Console.WriteLine(expressionTree.Evaluate(variableDefinitions).value);
 
 
 
-
-
-var tokens = Tokens.Tokenizer.Tokenize("3 + 5 * x + 11");
+var tokens = Tokens.Tokenizer.Tokenize("300 + 512 * my_value_to_be + 1521");
 foreach (var token in tokens)
 {
     Console.WriteLine(token);

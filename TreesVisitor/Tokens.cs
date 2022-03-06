@@ -25,6 +25,7 @@ namespace Tokens
     {
         public static Token[] Tokenize(string s)
         {
+            int stringPointer = 0;
             List<Token> xs = new List<Token>();
             while (s != "")
             {
@@ -35,6 +36,10 @@ namespace Tokens
                 foreach (var tryResult in tryCreates)
                 {
                     s = tryResult.newString;
+
+                    var tmp = stringPointer;
+                    stringPointer += tryResult.token.index;
+                    tryResult.token.index = tmp;
                     xs.Add(tryResult.token);
                 }
             }
