@@ -93,10 +93,50 @@ Console.WriteLine(expressionTree.Evaluate(variableDefinitions).value);
 variableDefinitions = new Dictionary<string, int>() { { "x", 20 } };
 Console.WriteLine(expressionTree.Evaluate(variableDefinitions).value);
 
+Console.WriteLine();
 
 
 
 var tokens = Tokens.Tokenizer.Tokenize("300 + 512 * my_value_to_be + 1521");
+foreach (var token in tokens)
+{
+    Console.WriteLine(token);
+}
+
+Console.WriteLine();
+
+tokens = Tokens.Tokenizer.Tokenize("-300.0 + 512.0 * f + 1521.0");
+foreach (var token in tokens)
+{
+    Console.WriteLine(token);
+}
+
+Console.WriteLine();
+
+
+var tokenGrouper = new Tokens.TokenGrouper(tokens);
+while (tokenGrouper.AttemptGroupingPass()) ;
+tokens = tokenGrouper.tokens.ToArray();
+
+foreach (var token in tokens)
+{
+    Console.WriteLine(token);
+}
+
+// The last '-Number' grouping doesn't work when there's whitespace
+tokens = Tokens.Tokenizer.Tokenize("-300.0 - 512.0 * f + -1521.0");
+foreach (var token in tokens)
+{
+    Console.WriteLine(token);
+}
+
+Console.WriteLine();
+
+
+tokenGrouper = new Tokens.TokenGrouper(tokens);
+while (tokenGrouper.AttemptGroupingPass()) ;
+tokens = tokenGrouper.tokens.ToArray();
+
 foreach (var token in tokens)
 {
     Console.WriteLine(token);
