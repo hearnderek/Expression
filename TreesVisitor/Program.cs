@@ -124,7 +124,7 @@ foreach (var token in tokens)
 }
 
 // The last '-Number' grouping doesn't work when there's whitespace
-tokens = Tokens.Tokenizer.Tokenize("-300.0 - 512.0 * f + -1521.0");
+tokens = Tokens.Tokenizer.Tokenize("-300.0 - 512.0 * f + - 1521.0");
 foreach (var token in tokens)
 {
     Console.WriteLine(token);
